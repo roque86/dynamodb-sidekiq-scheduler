@@ -1,41 +1,42 @@
+<%# This view is a copy from the sidekiq web view, with just a few new actions (remove, edit, new)  %>
 <% if Sidekiq::VERSION >= '6.0.0' %>
   <link href="<%= root_path %>stylesheets-scheduler/recurring_jobs.css" media="screen" rel="stylesheet" type="text/css" />
 <% else %>
   <style>
-    .recurring-jobs { border-top-left-radius: 4px; border-top-right-radius: 4px; }
-    .recurring-jobs .title { margin-bottom: 5px; }
-    .recurring-jobs .title .name { font-weight: bold;}
-    .recurring-jobs .info,
-    .recurring-jobs .description { margin-bottom: 5px; }
-    .recurring-jobs .actions { margin-bottom: 5px; }
-    .recurring-jobs .status,
-    .recurring-jobs .description { font-size: 12px; }
-    .recurring-jobs .enqueue { margin-bottom: 0.5rem }
+      .recurring-jobs { border-top-left-radius: 4px; border-top-right-radius: 4px; }
+      .recurring-jobs .title { margin-bottom: 5px; }
+      .recurring-jobs .title .name { font-weight: bold;}
+      .recurring-jobs .info,
+      .recurring-jobs .description { margin-bottom: 5px; }
+      .recurring-jobs .actions { margin-bottom: 5px; }
+      .recurring-jobs .status,
+      .recurring-jobs .description { font-size: 12px; }
+      .recurring-jobs .enqueue { margin-bottom: 0.5rem }
 
-    .list-group-item {
-      background-color: #f3f3f3;
-      color: #585454;
-      border: 1px solid rgba(0, 0, 0, 0.1);
-    }
-
-    .list-group-item-disabled {
-      background-color: #f3d3d3;
-    }
-
-    .toggle-all-buttons {
-      margin-top: 20px;
-      margin-bottom: 10px;
-      line-height: 45px;
-      text-align: right;
-    }
-
-    @media (max-width: 768px) {
-      .toggle-all-buttons {
-        margin-top: 0;
-        text-align: left;
-        line-height: inherit;
+      .list-group-item {
+          background-color: #f3f3f3;
+          color: #585454;
+          border: 1px solid rgba(0, 0, 0, 0.1);
       }
-    }
+
+      .list-group-item-disabled {
+          background-color: #f3d3d3;
+      }
+
+      .toggle-all-buttons {
+          margin-top: 20px;
+          margin-bottom: 10px;
+          line-height: 45px;
+          text-align: right;
+      }
+
+      @media (max-width: 768px) {
+          .toggle-all-buttons {
+              margin-top: 0;
+              text-align: left;
+              line-height: inherit;
+          }
+      }
   </style>
 <% end %>
 
@@ -48,6 +49,10 @@
       <%= csrf_tag %>
       <button type="submit" class="btn btn-warn btn-xs" name="action" value="enable"><%= t('enable_all') %></button>
       <button type="submit" class="btn btn-warn btn-xs" name="action" value="disable"><%= t('disable_all') %></button>
+    </form>
+    <form action="<%= root_path %>recurring-jobs/new" method="post">
+      <%= csrf_tag %>
+      <button type="submit" class="btn btn-warn btn-xs" name="action" value="enable"><%= t('new') %></button>
     </form>
   </div>
 </div>
@@ -83,6 +88,14 @@
             <form action="<%= root_path %>recurring-jobs/<%= ERB::Util.url_encode(job.name) %>/toggle" method="post">
               <%= csrf_tag %>
               <input type="submit" class="btn <%= job.enabled? ? "btn-primary" : "btn-warn"%> btn-xs" value="<%= job.enabled? ? t('disable') : t('enable') %>" />
+            </form>
+            <form action="<%= root_path %>recurring-jobs/<%= ERB::Util.url_encode(job.name) %>/destroy" method="post">
+              <%= csrf_tag %>
+              <input type="submit" class="btn <%= job.enabled? ? "btn-primary" : "btn-warn"%> btn-xs" value="<%= t('remove') %>" />
+            </form>
+            <form action="<%= root_path %>recurring-jobs/<%= ERB::Util.url_encode(job.name) %>/edit" method="post">
+              <%= csrf_tag %>
+              <input type="submit" class="btn <%= job.enabled? ? "btn-primary" : "btn-warn"%> btn-xs" value="<%= t('edit') %>" />
             </form>
           </div>
           <div class="col-md-4">

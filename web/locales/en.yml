@@ -14,3 +14,10 @@ en:
   enable: Enable
   disable_all: Disable all
   enable_all: Enable all
+  remove: Remove
+  edit: Edit
+  update: Update
+  new: New
+  cancel: Cancel
+  create: Create
+

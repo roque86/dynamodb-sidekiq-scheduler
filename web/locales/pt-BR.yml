@@ -6,9 +6,14 @@ pt-BR:
   class: Classe
   queue: Fila
   arguments: Argumentos
-  enqueue_now: Enfileirar agora 
+  enqueue_now: Enfileirar agora
   last_time: Última execução
   next_time: Próxima execução
   no_next_time: Não há mais execuçoẽs
   disable: Desativar
   enable: Ativar
+  remove: Removee
+  edit: Editar
+  update: Atualiza
+  new: Novo
+  cancel: Cancelar
