@@ -3,7 +3,7 @@ $:.push File.expand_path('../lib', __FILE__)
 require 'sidekiq-scheduler/version'
 
 Gem::Specification.new do |s|
-  s.name        = 'sidekiq-scheduler'
+  s.name        = 'dynamodb-sidekiq-scheduler'
   s.version     = SidekiqScheduler::VERSION
   s.authors     = ['Morton Jonuschat', 'Moove-it', 'Marcelo Lauxen']
   s.email       = ['sidekiq-scheduler@moove-it.com', 'marcelolauxen16@gmail.com']
