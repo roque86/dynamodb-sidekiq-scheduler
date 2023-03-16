@@ -14,6 +14,10 @@
       <button type="submit" class="btn btn-warn btn-xs" name="action" value="enable"><%= t('enable_all') %></button>
       <button type="submit" class="btn btn-warn btn-xs" name="action" value="disable"><%= t('disable_all') %></button>
     </form>
+    <form action="<%= root_path %>recurring-jobs/new" method="post">
+      <%= csrf_tag %>
+      <button type="submit" class="btn btn-warn btn-xs" name="action" value="enable"><%= t('new') %></button>
+    </form>
   </div>
 </div>
 
@@ -48,6 +52,14 @@
             <form action="<%= root_path %>recurring-jobs/<%= ERB::Util.url_encode(job.name) %>/toggle" method="post">
               <%= csrf_tag %>
               <input type="submit" class="btn <%= job.enabled? ? "btn-primary" : "btn-warn"%> btn-xs" value="<%= job.enabled? ? t('disable') : t('enable') %>" />
+            </form>
+            <form action="<%= root_path %>recurring-jobs/<%= ERB::Util.url_encode(job.name) %>/destroy" method="post">
+              <%= csrf_tag %>
+              <input type="submit" class="btn <%= job.enabled? ? "btn-primary" : "btn-warn"%> btn-xs" value="<%= t('remove') %>" />
+            </form>
+            <form action="<%= root_path %>recurring-jobs/<%= ERB::Util.url_encode(job.name) %>/edit" method="post">
+              <%= csrf_tag %>
+              <input type="submit" class="btn <%= job.enabled? ? "btn-primary" : "btn-warn"%> btn-xs" value="<%= t('edit') %>" />
             </form>
           </div>
           <div class="col-md-4">
