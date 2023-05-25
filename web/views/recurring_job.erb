@@ -8,8 +8,8 @@
     <input <%= @existing_rule ? 'disabled' : 'required' %> required name='name' type="text"
            value="<%= @name %>" style='width:50%;'/><br>
     <label for="args" style="padding-top: 10px;">Configuration:</label><br>
-    <textarea name='config' style='width:50%'><%= @config.to_json.html_safe %></textarea><br><br>
-
+    <textarea name='config' style='width:50%'><%= @config.to_json.html_safe %></textarea><br>
+    <span class="help-block" style='width:50%;'>Example:<br>{"cron":"0 9 * * * America/New_York","class":"NameSpace::WorkerName","args":["arg1","arg2"],"description":"something","queue":"default","enabled":true}</span><br>
     <a href="<%= root_path %>recurring-jobs" class="btn btn-warn btn-xs"><%= t('cancel') %></a>
     <input type="submit" class="btn btn-warn btn-xs" value="<%= @existing_rule ? t('update') : t('create') %>"/><br>
     <a></a>
