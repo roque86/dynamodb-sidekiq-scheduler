@@ -2,24 +2,16 @@
 
 <form action="<%= @form_action %>"
       method="post" class="recurring-job" style="background-color:white;">
-    <%= csrf_tag %>
-    <div style="padding: 20px;">
-        <label for="job_name">Job name:</label><br>
-        <input <%= @existing_rule ? 'disabled' : 'required' %> required name='job_name' type="text"
-               value="<%= @presented_job.name %>" style='width:50%;'/><br>
-        <label for="worker_class" style="padding-top: 10px;">Worker Class:</label><br>
-        <input name='worker_class' required type="text" value="<%= @presented_job['class'] %>" style='width:50%'/><br>
-        <label for="description" style="padding-top: 10px;">Description:</label><br>
-        <input name='description' type="text" value="<%= @presented_job['description'] %>" style='width:50%'/><br>
-        <label for="cron" style="padding-top: 10px;">Cron Rule:</label><br>
-        <input name='cron' type="text" value="<%= @presented_job['cron'] %>" style='width:50%'/><br>
-        <label for="queue" style="padding-top: 10px;">Queue:</label><br>
-        <input name='queue' type="text" value="<%= @presented_job['queue'] %>" style='width:50%'/><br>
-        <label for="args" style="padding-top: 10px;">Args:</label><br>
-        <input name='args' type="text" value="<%= @presented_job['args'] %>" style='width:50%'/><br><br>
+  <%= csrf_tag %>
+  <div style="padding: 20px;">
+    <label for="name">Name:</label><br>
+    <input <%= @existing_rule ? 'disabled' : 'required' %> required name='name' type="text"
+           value="<%= @name %>" style='width:50%;'/><br>
+    <label for="args" style="padding-top: 10px;">Configuration:</label><br>
+    <textarea name='config' style='width:50%'><%= @config.to_json.html_safe %></textarea><br><br>
 
-        <a href="<%= root_path %>recurring-jobs" class="btn btn-warn btn-xs"><%= t('cancel') %></a>
-        <input type="submit" class="btn btn-warn btn-xs" value="<%= @existing_rule ? t('update') : t('create') %>"/><br>
-        <a></a>
-    </div>
+    <a href="<%= root_path %>recurring-jobs" class="btn btn-warn btn-xs"><%= t('cancel') %></a>
+    <input type="submit" class="btn btn-warn btn-xs" value="<%= @existing_rule ? t('update') : t('create') %>"/><br>
+    <a></a>
+  </div>
 </form>

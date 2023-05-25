@@ -46,7 +46,7 @@ module SidekiqScheduler
 
         dynamo_clas_name = ENV.fetch('SIDEKIQ_SCHEDUER_DYNAMOID_CLASS', 'ScheduleRule')
         klass = dynamo_clas_name.constantize
-        sr = klass.where(job_name: params[:name]).first
+        sr = klass.where(name: params[:name]).first
         if sr.present?
           sr.destroy
         else
@@ -60,29 +60,26 @@ module SidekiqScheduler
         @title = 'Recurring Job Update'
         @form_action = "#{root_path}recurring-jobs/#{ERB::Util.url_encode(params[:name])}/update"
         @existing_rule = true
-        @presented_job = JobPresenter.new(params[:name], Sidekiq.get_schedule(params[:name]))
+        @name = params[:name]
+        @config = Sidekiq.get_schedule(params[:name])
         erb File.read(File.join(VIEW_PATH, 'recurring_job.erb'))
       end
 
       app.post '/recurring-jobs/new' do
         @title = 'New Recurring Job'
-        @presented_job = JobPresenter.new('', {})
         @existing_rule = false
         @form_action = "#{root_path}recurring-jobs/create"
+        @name = ''
+        dynamo_clas_name = ENV.fetch('SIDEKIQ_SCHEDUER_DYNAMOID_CLASS', 'ScheduleRule')
+        klass = dynamo_clas_name.constantize
+        @config = klass.sample_config
         erb File.read(File.join(VIEW_PATH, 'recurring_job.erb'))
       end
 
       app.post '/recurring-jobs/:name/update' do
         dynamo_clas_name = ENV.fetch('SIDEKIQ_SCHEDUER_DYNAMOID_CLASS', 'ScheduleRule')
         klass = dynamo_clas_name.constantize
-        config = params.slice(*%w[worker_class description cron queue args]).transform_values(&:presence)
-        sr = klass.where(job_name: params[:name]).first
-        if sr.present?
-          config.each { |k, v| sr.send "#{k}=", v}
-          sr.save!
-        else
-          klass.create config.merge(job_name: params[:name])
-        end
+        klass.update_or_create name: params[:name], config: JSON.parse(params[:config])
 
         Sidekiq.reload_schedule!
         redirect "#{root_path}recurring-jobs"
@@ -91,9 +88,7 @@ module SidekiqScheduler
       app.post '/recurring-jobs/create' do
         dynamo_clas_name = ENV.fetch('SIDEKIQ_SCHEDUER_DYNAMOID_CLASS', 'ScheduleRule')
         klass = dynamo_clas_name.constantize
-        config = params.slice(*%w[job_name worker_class description cron queue args])
-                       .transform_values(&:presence)
-        klass.create config
+        klass.update_or_create name: params[:name], config: JSON.parse(params[:config])
 
         Sidekiq.reload_schedule!
         redirect "#{root_path}recurring-jobs"
