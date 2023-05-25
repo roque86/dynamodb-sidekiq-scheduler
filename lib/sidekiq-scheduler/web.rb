@@ -70,9 +70,7 @@ module SidekiqScheduler
         @existing_rule = false
         @form_action = "#{root_path}recurring-jobs/create"
         @name = ''
-        dynamo_clas_name = ENV.fetch('SIDEKIQ_SCHEDUER_DYNAMOID_CLASS', 'ScheduleRule')
-        klass = dynamo_clas_name.constantize
-        @config = klass.sample_config
+        @config = { queue: 'default', enabled: false }
         erb File.read(File.join(VIEW_PATH, 'recurring_job.erb'))
       end
 
